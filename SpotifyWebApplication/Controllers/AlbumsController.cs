@@ -82,12 +82,12 @@ namespace SpotifyWebApplication.Controllers
                 _context.Add(album);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
-                return RedirectToAction("Index", "Artists", new {id = artistId, name = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name});
+                return RedirectToAction("Index", "Albums", new {id = artistId, name = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name});
             }
             //ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
             //ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", album.PublisherId);
             //return View(album);
-            return RedirectToAction("Index", "Artists", new { id = artistId, name = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name });
+            return RedirectToAction("Index", "Albums", new { id = artistId, name = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name });
 
         }
 
@@ -176,6 +176,7 @@ namespace SpotifyWebApplication.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        
 
         private bool AlbumExists(int id)
         {

@@ -32,6 +32,7 @@ namespace SpotifyWebApplication.Controllers
             // finding songs by album
             ViewBag.AlbumId = id;
             ViewBag.Name = name;
+            ViewBag.state = "альбому";
             var songsByAlbum = _context.Songs.Where(a => a.AlbumId == id).Include(a => a.Album);
             ViewBag.Count = songsByAlbum.Count();
             return View(await songsByAlbum.ToListAsync());
