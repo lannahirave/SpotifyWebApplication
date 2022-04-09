@@ -59,9 +59,11 @@ namespace SpotifyWebApplication.Controllers
         }
 
         // GET: Albums/Create
-        public IActionResult Create()
+        public IActionResult Create(int artistId)
         {
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name");
+            // ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name");
+            ViewBag.ArtistId = artistId;
+            ViewBag.ArtistName = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name;
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
             return View();
         }
@@ -71,17 +73,21 @@ namespace SpotifyWebApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,ReleaseDate,PublisherId,PhotoLink,ArtistId")] Album album)
+        public async Task<IActionResult> Create(int artistId, [Bind("Id,Name,ReleaseDate,PublisherId,PhotoLink,ArtistId")] Album album)
         {
+            album.ArtistId = artistId;
             if (ModelState.IsValid)
             {
                 _context.Add(album);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Artists", new {id = artistId, name = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name});
             }
-            ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
-            ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", album.PublisherId);
-            return View(album);
+            //ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
+            //ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", album.PublisherId);
+            //return View(album);
+            return RedirectToAction("Index", "Artists", new { id = artistId, name = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name });
+
         }
 
         // GET: Albums/Edit/5

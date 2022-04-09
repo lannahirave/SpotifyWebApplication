@@ -7,7 +7,8 @@
 <h1>Альбоми</h1>
 
 <p>
-    <a asp-action="Create" asp-route-id="@ViewBag.ArtistId">Додати новий альбом</a>
+    <!-- <a asp-action="Create" asp-route-id="@ViewBag.ArtistId">Додати новий альбом</a> -->
+    @Html.ActionLink("Додати новий альбом", "Create", new {albumId = @ViewBag.AlbumId})
 </p>
 <table class="table">
     <thead>

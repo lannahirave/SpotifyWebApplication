@@ -15,6 +15,7 @@ namespace SpotifyWebApplication
         [Display(Name ="Артист")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }
+        [Display(Name = "Посилання на фотографію")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string PhotoLink { get; set; }
         [Display(Name="Популярність на Spotify")]

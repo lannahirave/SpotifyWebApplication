@@ -20,7 +20,7 @@ namespace SpotifyWebApplication
         [Display(Name = "Лейбл")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public int PublisherId { get; set; }
-        
+        [Display(Name = "Посилання на фотографію")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string PhotoLink { get; set; }
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
