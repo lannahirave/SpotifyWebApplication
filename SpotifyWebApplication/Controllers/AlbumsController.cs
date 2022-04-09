@@ -55,7 +55,8 @@ namespace SpotifyWebApplication.Controllers
                 return NotFound();
             }
 
-            return View(album);
+            //return View(album);
+            return RedirectToAction("Index", "Songs", new {id = album.Id, name = album.Name});
         }
 
         // GET: Albums/Create
