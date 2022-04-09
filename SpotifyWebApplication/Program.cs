@@ -31,4 +31,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Artists}/{action=Index}/{id?}");
 
+
+
 app.Run();

@@ -1,14 +1,14 @@
 ﻿@model SpotifyWebApplication.Artist
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Видалення артисту";
 }
 
-<h1>Delete</h1>
+<h1>Видалення</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Ви точно хочете його видалити?</h3>
 <div>
-    <h4>Artist</h4>
+    <h4>Артист</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -33,7 +33,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Видалити" class="btn btn-danger" /> |
+        <a asp-action="Index">Повернутися</a>
     </form>
 </div>

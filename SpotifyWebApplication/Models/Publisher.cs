@@ -11,7 +11,7 @@ namespace SpotifyWebApplication
         }
 
         public int Id { get; set; }
-        [Display(Name = "Назва")]
+        [Display(Name = "Релізер")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }
 

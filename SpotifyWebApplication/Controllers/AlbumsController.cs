@@ -33,7 +33,7 @@ namespace SpotifyWebApplication.Controllers
             }
             // finding albums by artist
             ViewBag.ArtistId = id;
-            ViewBag.Name = name;
+            ViewBag.ArtistName = name;
             var albumsByArtist = _context.Albums.Where(a => a.ArtistId == id).Include(a => a.Artist);
             return View(await albumsByArtist.ToListAsync());
         }
@@ -63,8 +63,11 @@ namespace SpotifyWebApplication.Controllers
         public IActionResult Create(int artistId)
         {
             // ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name");
+            // Console.ForegroundColor = ConsoleColor.Red;
+            // Console.WriteLine(artistId);
+            // Console.ForegroundColor = ConsoleColor.White;
             ViewBag.ArtistId = artistId;
-            ViewBag.ArtistName = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name;
+            ViewBag.ArtistName = _context.Artists.FirstOrDefault(c => c.Id == artistId)?.Name;
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
             return View();
         }
@@ -77,17 +80,18 @@ namespace SpotifyWebApplication.Controllers
         public async Task<IActionResult> Create(int artistId, [Bind("Id,Name,ReleaseDate,PublisherId,PhotoLink,ArtistId")] Album album)
         {
             album.ArtistId = artistId;
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return RedirectToAction("Index", "Albums",
+                    new {id = artistId, name = _context.Artists.FirstOrDefault(c => c.Id == artistId)?.Name});
             {
                 _context.Add(album);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
-                return RedirectToAction("Index", "Artists", new {id = artistId, name = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name});
+                return RedirectToAction("Index", "Albums", new {id = artistId, name = _context.Artists.FirstOrDefault(c => c.Id == artistId)?.Name});
             }
             //ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
             //ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", album.PublisherId);
             //return View(album);
-            return RedirectToAction("Index", "Artists", new { id = artistId, name = _context.Artists.Where(c => c.Id == artistId).FirstOrDefault().Name });
 
         }
 
@@ -139,11 +143,12 @@ namespace SpotifyWebApplication.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Albums", new {id = album.ArtistId, name = _context.Artists.FirstOrDefault(c => c.Id == album.ArtistId)?.Name});
             }
             ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", album.PublisherId);
-            return View(album);
+            //return View(album);
+            return RedirectToAction("Index", "Albums", new {id = album.ArtistId, name = _context.Artists.FirstOrDefault(c => c.Id == album.ArtistId)?.Name});
         }
 
         // GET: Albums/Delete/5
@@ -176,6 +181,7 @@ namespace SpotifyWebApplication.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        
 
         private bool AlbumExists(int id)
         {

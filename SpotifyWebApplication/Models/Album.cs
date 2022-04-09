@@ -10,7 +10,7 @@ namespace SpotifyWebApplication
             Songs = new HashSet<Song>();
         }
 
-        public int Id { get; set; }
+        public int Id { get; set;}
         [Display (Name="Назва")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }

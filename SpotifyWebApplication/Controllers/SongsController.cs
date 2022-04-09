@@ -31,7 +31,8 @@ namespace SpotifyWebApplication.Controllers
             }
             // finding songs by album
             ViewBag.AlbumId = id;
-            ViewBag.Name = name;
+            ViewBag.AlbumName = name;
+            ViewBag.state = "альбому";
             var songsByAlbum = _context.Songs.Where(a => a.AlbumId == id).Include(a => a.Album);
             ViewBag.Count = songsByAlbum.Count();
             return View(await songsByAlbum.ToListAsync());
@@ -75,14 +76,22 @@ namespace SpotifyWebApplication.Controllers
             song.AlbumId = albumId;
             if (ModelState.IsValid)
             {
+                var artistId = _context.Albums.Where(a => a.Id == albumId).FirstOrDefault().ArtistId;
                 _context.Add(song);
+                ArtistsSong artistsSong = new ArtistsSong();
+                artistsSong.SongId = song.Id;
+                artistsSong.ArtistId = artistId;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"{song.Id}, {artistId}");
+                Console.ForegroundColor = ConsoleColor.White;
+                _context.Add(artistsSong);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
                 return RedirectToAction("Index", "Songs", new {id = albumId, name = _context.Albums.Where(b => b.Id == albumId).FirstOrDefault().Name});
             }
             //ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Name", song.AlbumId);
             //return View(song);
-            return RedirectToAction("Index", "Songs", new { id = albumId, name = _context.Albums.Where(b => b.Id == albumId).FirstOrDefault().Name });
+            return RedirectToAction("Index", "Songs", new { id = albumId, name = _context.Albums.Where(b => b.Id == albumId).FirstOrDefault().Name});
 
         }
 

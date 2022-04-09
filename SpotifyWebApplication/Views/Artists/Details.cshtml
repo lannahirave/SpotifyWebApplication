@@ -1,10 +1,10 @@
 ﻿@model SpotifyWebApplication.Artist
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Докладніше про артиста";
 }
 
-<h1>Details</h1>
+<h1>Докладніше</h1>
 
 <div>
     <h4>Artist</h4>
@@ -31,6 +31,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Редагувати</a> |
+    <a asp-action="Index">Повернутися</a>
 </div>
