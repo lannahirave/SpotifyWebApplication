@@ -9,23 +9,22 @@ using SpotifyWebApplication;
 
 namespace SpotifyWebApplication.Controllers
 {
-    public class ArtistsController : Controller
+    public class PublishersController : Controller
     {
         private readonly spotifyContext _context;
 
-        public ArtistsController(spotifyContext context)
+        public PublishersController(spotifyContext context)
         {
             _context = context;
         }
 
-        // GET: Artists
+        // GET: Publishers
         public async Task<IActionResult> Index()
         {
-            
-            return View(await _context.Artists.ToListAsync());
+            return View(await _context.Publishers.ToListAsync());
         }
 
-        // GET: Artists/Details/5
+        // GET: Publishers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,40 +32,39 @@ namespace SpotifyWebApplication.Controllers
                 return NotFound();
             }
 
-            var artist = await _context.Artists
+            var publisher = await _context.Publishers
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (artist == null)
+            if (publisher == null)
             {
                 return NotFound();
             }
 
-            //return View(artist);
-            return RedirectToAction("Index", "Albums", new {id = artist.Id, name = artist.Name});
+            return View(publisher);
         }
 
-        // GET: Artists/Create
+        // GET: Publishers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Artists/Create
+        // POST: Publishers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,PhotoLink,RankOnSpotify")] Artist artist)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Publisher publisher)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(artist);
+                _context.Add(publisher);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(artist);
+            return View(publisher);
         }
 
-        // GET: Artists/Edit/5
+        // GET: Publishers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +72,22 @@ namespace SpotifyWebApplication.Controllers
                 return NotFound();
             }
 
-            var artist = await _context.Artists.FindAsync(id);
-            if (artist == null)
+            var publisher = await _context.Publishers.FindAsync(id);
+            if (publisher == null)
             {
                 return NotFound();
             }
-            return View(artist);
+            return View(publisher);
         }
 
-        // POST: Artists/Edit/5
+        // POST: Publishers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,PhotoLink,RankOnSpotify")] Artist artist)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Publisher publisher)
         {
-            if (id != artist.Id)
+            if (id != publisher.Id)
             {
                 return NotFound();
             }
@@ -98,12 +96,12 @@ namespace SpotifyWebApplication.Controllers
             {
                 try
                 {
-                    _context.Update(artist);
+                    _context.Update(publisher);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ArtistExists(artist.Id))
+                    if (!PublisherExists(publisher.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +112,10 @@ namespace SpotifyWebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(artist);
+            return View(publisher);
         }
 
-        // GET: Artists/Delete/5
+        // GET: Publishers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +123,30 @@ namespace SpotifyWebApplication.Controllers
                 return NotFound();
             }
 
-            var artist = await _context.Artists
+            var publisher = await _context.Publishers
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (artist == null)
+            if (publisher == null)
             {
                 return NotFound();
             }
 
-            return View(artist);
+            return View(publisher);
         }
 
-        // POST: Artists/Delete/5
+        // POST: Publishers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var artist = await _context.Artists.FindAsync(id);
-            _context.Artists.Remove(artist);
+            var publisher = await _context.Publishers.FindAsync(id);
+            _context.Publishers.Remove(publisher);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ArtistExists(int id)
+        private bool PublisherExists(int id)
         {
-            return _context.Artists.Any(e => e.Id == id);
+            return _context.Publishers.Any(e => e.Id == id);
         }
     }
 }

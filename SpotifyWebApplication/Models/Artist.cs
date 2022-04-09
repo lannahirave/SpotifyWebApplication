@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System;
+using System.ComponentModel.DataAnnotations;
 namespace SpotifyWebApplication
 {
     public partial class Artist
@@ -12,8 +12,13 @@ namespace SpotifyWebApplication
         }
 
         public int Id { get; set; }
+        [Display(Name ="Артист")]
+        [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string PhotoLink { get; set; }
+        [Display(Name="Популярність на Spotify")]
+        [Required(ErrorMessage ="Поле не повинно бути пустим.")]
         public int RankOnSpotify { get; set; }
 
         public virtual ICollection<Album> Albums { get; set; }

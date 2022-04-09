@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.ComponentModel.DataAnnotations;
 namespace SpotifyWebApplication
 {
     public partial class Publisher
@@ -11,6 +11,8 @@ namespace SpotifyWebApplication
         }
 
         public int Id { get; set; }
+        [Display(Name = "Назва")]
+        [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }
 
         public virtual ICollection<Album> Albums { get; set; }
