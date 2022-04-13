@@ -13,6 +13,7 @@ namespace SpotifyWebApplication
 
         public int Id { get; set; }
         [Display(Name ="Артист")]
+        [MaxLength(255)]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }
         [Display(Name = "Посилання на фотографію")]
