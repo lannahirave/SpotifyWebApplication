@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SpotifyWebApplication
 {
-    public partial class PlaylistsSong
+    public class PlaylistsSong
     {
         public int Id { get; set; }
         public int PlaylistId { get; set; }

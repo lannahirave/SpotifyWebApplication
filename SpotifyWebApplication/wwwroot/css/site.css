@@ -13,6 +13,10 @@ html {
   min-height: 100%;
 }
 
+
 body {
   margin-bottom: 60px;
+  header{
+        background-color: rgb(131, 148, 150);
+        }
 }

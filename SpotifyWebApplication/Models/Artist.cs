@@ -8,7 +8,7 @@ namespace SpotifyWebApplication
         public Artist()
         {
             Albums = new HashSet<Album>();
-            ArtistsSongs = new HashSet<ArtistsSong>();
+            //ArtistsSongs = new HashSet<ArtistsSong>();
         }
 
         public int Id { get; set; }
@@ -23,7 +23,7 @@ namespace SpotifyWebApplication
         [Required(ErrorMessage ="Поле не повинно бути пустим.")]
         public int RankOnSpotify { get; set; }
 
-        public virtual ICollection<Album> Albums { get; set; }
-        public virtual ICollection<ArtistsSong> ArtistsSongs { get; set; }
+        public ICollection<Album> Albums { get; set; }
+        public ICollection<Song> Songs { get; set; } = new HashSet<Song>();
     }
 }

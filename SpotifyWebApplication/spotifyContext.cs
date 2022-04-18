@@ -74,9 +74,29 @@ namespace SpotifyWebApplication
                 entity.Property(e => e.PhotoLink)
                     .IsRequired()
                     .HasMaxLength(255);
+                
+                /*entity.HasMany(c => c.Songs)
+                    .WithMany(a => a.Artists)
+                    .UsingEntity<ArtistsSong>(
+                        configureRight => configureRight
+                            .HasOne(d => d.Song)
+                            .WithMany()
+                            .HasForeignKey(d => d.SongId)
+                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .HasConstraintName("artists_songs_songid_foreign"),
+                        configureLeft => configureLeft
+                            .HasOne(d => d.Artist)
+                            .WithMany()
+                            .HasForeignKey(d => d.ArtistId)
+                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .HasConstraintName("artists_songs_artistid_foreign"),
+                        builder => builder
+                            .ToTable("Artists_songs")
+                            .Property(x => x.Id)
+                    );*/
             });
 
-            modelBuilder.Entity<ArtistsSong>(entity =>
+            /*modelBuilder.Entity<ArtistsSong>(entity =>
             {
                 entity.ToTable("Artists_songs");
 
@@ -93,7 +113,7 @@ namespace SpotifyWebApplication
                     .HasForeignKey(d => d.SongId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("artists_songs_songid_foreign");
-            });
+            });*/
 
             modelBuilder.Entity<Playlist>(entity =>
             {
@@ -153,6 +173,26 @@ namespace SpotifyWebApplication
                     .HasForeignKey(d => d.AlbumId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("songs_albumid_foreign");
+                
+                entity.HasMany(c => c.Artists)
+                    .WithMany(a => a.Songs)
+                    .UsingEntity<ArtistsSong>(
+                        configureLeft => configureLeft
+                            .HasOne(d => d.Artist)
+                            .WithMany()
+                            .HasForeignKey(d => d.ArtistId)
+                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .HasConstraintName("artists_songs_artistid_foreign"),
+                        configureRight => configureRight
+                            .HasOne(d => d.Song)
+                            .WithMany()
+                            .HasForeignKey(d => d.SongId)
+                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .HasConstraintName("artists_songs_songid_foreign"),
+                        builder => builder
+                            .ToTable("Artists_songs")
+                            .Property(x => x.Id)
+                    );
             });
 
             OnModelCreatingPartial(modelBuilder);

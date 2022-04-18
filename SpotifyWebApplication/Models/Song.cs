@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace SpotifyWebApplication
 {
-    public partial class Song 
+    public class Song 
     {
         public Song()
         {
-            ArtistsSongs = new HashSet<ArtistsSong>();
+            //ArtistsSongs = new HashSet<ArtistsSong>();
             PlaylistsSongs = new HashSet<PlaylistsSong>();
         }
 
@@ -19,11 +21,12 @@ namespace SpotifyWebApplication
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public int Duration { get; set; }
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
+        [ForeignKey("Albums")]
         public int AlbumId { get; set; }
 
         [Display(Name = "Альбом")]
-        public virtual Album Album { get; set; }
-        public virtual ICollection<ArtistsSong> ArtistsSongs { get; set; }
-        public virtual ICollection<PlaylistsSong> PlaylistsSongs { get; set; }
+        public Album Album { get; set; }
+        public ICollection<PlaylistsSong> PlaylistsSongs { get; set; }
+        public ICollection<Artist> Artists { get; set; } = new HashSet<Artist>();
     }
 }
