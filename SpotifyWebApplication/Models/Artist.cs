@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using Microsoft.Build.Framework;
+
 namespace SpotifyWebApplication
 {
     public partial class Artist
@@ -13,14 +16,16 @@ namespace SpotifyWebApplication
 
         public int Id { get; set; }
         [Display(Name ="Артист")]
-        [MaxLength(255)]
-        [Required(ErrorMessage = "Поле не повинно бути пустим.")]
+        [StringLength(255, ErrorMessage = "Занадто коротке або занадто довге ім'я.")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }
         [Display(Name = "Посилання на фотографію")]
-        [Required(ErrorMessage = "Поле не повинно бути пустим.")]
+        [Url(ErrorMessage = "Повинно бути посиланням.")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string PhotoLink { get; set; }
         [Display(Name="Популярність на Spotify")]
-        [Required(ErrorMessage ="Поле не повинно бути пустим.")]
+        [Range(0, Int32.MaxValue, ErrorMessage = "Має бути більше 0, не повторюватись.")]
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage ="Поле не повинно бути пустим.")]
         public int RankOnSpotify { get; set; }
 
         public ICollection<Album> Albums { get; set; }

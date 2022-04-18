@@ -12,16 +12,18 @@ namespace SpotifyWebApplication
 
         public int Id { get; set;}
         [Display (Name="Назва")]
-        [MaxLength(255)]
+        [StringLength(255, ErrorMessage = "Занадто коротке або занадто довге.")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }
         [Display(Name = "Реліз")]
+        [DataType(DataType.Time, ErrorMessage = "Має бути в форматі часу.")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public DateTimeOffset ReleaseDate { get; set; }
         [Display(Name = "Лейбл")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public int PublisherId { get; set; }
         [Display(Name = "Посилання на фотографію")]
+        [Url(ErrorMessage = "Має бути посиланням.")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string PhotoLink { get; set; }
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
