@@ -16,7 +16,7 @@ namespace SpotifyWebApplication
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Name { get; set; }
         [Display(Name = "Реліз")]
-        [DataType(DataType.Time, ErrorMessage = "Має бути в форматі часу.")]
+        [DataType(DataType.Date, ErrorMessage = "Має бути в форматі дати.")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public DateTimeOffset ReleaseDate { get; set; }
         [Display(Name = "Лейбл")]

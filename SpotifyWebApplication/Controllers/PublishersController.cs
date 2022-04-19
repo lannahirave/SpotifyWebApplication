@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SpotifyWebApplication;
 
 namespace SpotifyWebApplication.Controllers
 {
@@ -139,6 +133,31 @@ namespace SpotifyWebApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var publisher = await _context.Publishers.FindAsync(id);
+            var albums = _context.Albums.Where(c => c.PublisherId == id);
+            /*if (albums.Any())
+            {
+                foreach (var album in albums)
+                {
+                    var albumId = album.Id;
+                    var songs = _context.Songs.Where(c => c.AlbumId == albumId);
+                    foreach (var song in songs)
+                    {
+                        var songId = song.Id;
+                        var artistssongs = _context.ArtistsSongs.Where(c => c.SongId == songId);
+                        foreach (var artsong in artistssongs)
+                        {
+                            _context.Remove(artsong);
+                        }
+                        var playlistsongs = _context.PlaylistsSongs.Where(c => c.SongId == songId);
+                        foreach (var playsong in playlistsongs)
+                        {
+                            _context.Remove(playsong);
+                        }
+                        _context.Remove(song);
+                    }
+                    _context.Albums.Remove(album);
+                }
+            }*/
             _context.Publishers.Remove(publisher);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

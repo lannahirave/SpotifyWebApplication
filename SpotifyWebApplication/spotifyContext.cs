@@ -50,13 +50,13 @@ namespace SpotifyWebApplication
                 entity.HasOne(d => d.Artist)
                     .WithMany(p => p.Albums)
                     .HasForeignKey(d => d.ArtistId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("albums_artistid_foreign");
 
                 entity.HasOne(d => d.Publisher)
                     .WithMany(p => p.Albums)
                     .HasForeignKey(d => d.PublisherId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("albums_publisherid_foreign");
             });
 
@@ -171,7 +171,7 @@ namespace SpotifyWebApplication
                 entity.HasOne(d => d.Album)
                     .WithMany(p => p.Songs)
                     .HasForeignKey(d => d.AlbumId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("songs_albumid_foreign");
                 
                 entity.HasMany(c => c.Artists)

@@ -19,7 +19,7 @@ namespace SpotifyWebApplication.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index(int? id, string? name)
+        public async Task<IActionResult> Index(int? id, string name)
         {
             //var spotifyContext = _context.Songs.Include(s => s.Album);
             //return View(await spotifyContext.ToListAsync());
