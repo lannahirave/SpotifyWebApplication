@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SpotifyWebApplication;
+using SpotifyWebApplication.Models;
 
 namespace SpotifyWebApplication.Controllers
 {
@@ -101,29 +102,49 @@ namespace SpotifyWebApplication.Controllers
                 return NotFound();
             }
 
-            var song = await _context.Songs.FindAsync(id);
+            var song = await _context.Songs.Include(c=> c.Artists).FirstOrDefaultAsync(c => c.Id == id);
             if (song == null)
             {
                 return NotFound();
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Name", song.AlbumId);
-            return View(song);
+            ViewBag.Artists = new MultiSelectList(_context.Artists, "Id", "Name");
+            var songEdit = new SongEdit
+            {
+                Id = song.Id,
+                Name = song.Name,
+                Duration = song.Duration,
+                AlbumId = song.AlbumId,
+                ArtistsIds = song.Artists.Select(c => c.Id).ToList()
+            };
+
+            return View(songEdit);
         }
 
         // POST: Songs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Duration,AlbumId")] Song song)
+        public async Task<IActionResult> Edit(int id, SongEdit songEdit)
         {
-            if (id != song.Id)
+            if (id != songEdit.Id)
             {
                 return NotFound();
             }
-
+            
             if (ModelState.IsValid)
             {
+                var song = await _context.Songs.Include(c => c.Artists).FirstOrDefaultAsync(d => d.Id == songEdit.Id);
+                if (song is null)
+                {
+                    return NotFound();
+                }
+
+                song.Name = songEdit.Name;
+                song.Duration = songEdit.Duration;
+                var artists = await _context.Artists.Where(c => songEdit.ArtistsIds.Contains(c.Id)).ToListAsync();
+                song.Artists = artists;
                 try
                 {
                     _context.Update(song);
@@ -142,8 +163,8 @@ namespace SpotifyWebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Name", song.AlbumId);
-            return View(song);
+            ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Name", songEdit.AlbumId);
+            return View(songEdit);
         }
 
         // GET: Songs/Delete/5

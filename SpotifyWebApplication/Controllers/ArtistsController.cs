@@ -141,30 +141,6 @@ namespace SpotifyWebApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var artist = await _context.Artists.FindAsync(id);
-            var albums = _context.Albums.Where(c=> c.ArtistId == id);
-            /*foreach (var album in albums)
-            {
-                var albumId = album.Id;
-                var songs = _context.Songs.Where(c => c.AlbumId == albumId);
-                foreach (var song in songs)
-                {
-                    var songId = song.Id;
-                    var artistssongs = _context.ArtistsSongs.Where(c => c.SongId == songId);
-                    foreach (var artsong in artistssongs)
-                    {
-                        _context.Remove(artsong);
-                    }
-
-                    var playlistsongs = _context.PlaylistsSongs.Where(c => c.SongId == songId);
-                    foreach (var playsong in playlistsongs)
-                    {
-                        _context.Remove(playsong);
-                    }
-                    _context.Remove(song);
-                }
-                _context.Albums.Remove(album);
-
-            }*/
             _context.Artists.Remove(artist);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

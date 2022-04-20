@@ -29,6 +29,6 @@ namespace SpotifyWebApplication
         [Display(Name = "Альбом")]
         public Album Album { get; set; }
         public ICollection<PlaylistsSong> PlaylistsSongs { get; set; }
-        public ICollection<Artist> Artists { get; set; } = new HashSet<Artist>();
+        public ICollection<Artist> Artists { get; set; } = new List<Artist>();
     }
 }
