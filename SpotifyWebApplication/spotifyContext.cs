@@ -130,9 +130,29 @@ namespace SpotifyWebApplication
                 entity.Property(e => e.PhotoLink)
                     .IsRequired()
                     .HasMaxLength(255);
+                entity.HasMany(c => c.Songs)
+                    .WithMany(a => a.Playlists)
+                    .UsingEntity<PlaylistsSong>(
+                        
+                        configureRight => configureRight
+                            .HasOne(d => d.Song)
+                            .WithMany()
+                            .HasForeignKey(d => d.SongId)
+                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .HasConstraintName("playlists_songs_songid_foreign"),
+                        configureLeft => configureLeft
+                            .HasOne(d => d.Playlist)
+                            .WithMany()
+                            .HasForeignKey(d => d.PlaylistId)
+                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .HasConstraintName("playlists_songs_playlistid_foreign"),
+                        builder => builder
+                            .ToTable("Playlists_songs")
+                            .Property(x => x.Id)
+                    );
             });
 
-            modelBuilder.Entity<PlaylistsSong>(entity =>
+            /*modelBuilder.Entity<PlaylistsSong>(entity =>
             {
                 entity.ToTable("Playlists_songs");
 
@@ -149,7 +169,7 @@ namespace SpotifyWebApplication
                     .HasForeignKey(d => d.SongId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("playlists_songs_songid_foreign");
-            });
+            });*/
 
             modelBuilder.Entity<Publisher>(entity =>
             {

@@ -28,5 +28,6 @@ namespace SpotifyWebApplication
         public string PhotoLink { get; set; }
 
         public virtual ICollection<PlaylistsSong> PlaylistsSongs { get; set; }
+        public ICollection<Song> Songs { get; set; }
     }
 }

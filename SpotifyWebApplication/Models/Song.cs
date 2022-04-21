@@ -10,7 +10,7 @@ namespace SpotifyWebApplication
         public Song()
         {
             //ArtistsSongs = new HashSet<ArtistsSong>();
-            PlaylistsSongs = new HashSet<PlaylistsSong>();
+            //PlaylistsSongs = new HashSet<PlaylistsSong>();
         }
 
         public int Id { get; set; }
@@ -28,7 +28,9 @@ namespace SpotifyWebApplication
 
         [Display(Name = "Альбом")]
         public Album Album { get; set; }
-        public ICollection<PlaylistsSong> PlaylistsSongs { get; set; }
+
+        public ICollection<Playlist> Playlists { get; set; } = new List<Playlist>();
         public ICollection<Artist> Artists { get; set; } = new List<Artist>();
     }
+    
 }
