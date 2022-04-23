@@ -6,7 +6,7 @@
 
 <h1>Додавання альбома до артиста  @ViewBag.ArtistName</h1>
 
-<h4>Album</h4>
+<h4>Альбом</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -44,7 +44,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Повернутися</a>
+    @Html.ActionLink("Повернутися до списку","Index", "Albums", new {id = ViewBag.ArtistId, name=ViewBag.ArtistName})
 </div>
 
 @section Scripts {

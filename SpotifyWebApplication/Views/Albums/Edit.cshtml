@@ -1,12 +1,13 @@
-﻿@model SpotifyWebApplication.Album
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model SpotifyWebApplication.Album
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редагування альбому";
 }
 
-<h1>Edit</h1>
+<h1>Редагування</h1>
 
-<h4>Album</h4>
+<h4>@ViewBag.AlbumName</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,7 +26,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PublisherId" class="control-label"></label>
-                <select asp-for="PublisherId" class="form-control" asp-items="ViewBag.PublisherId"></select>
+                <select asp-for="PublisherId" class="form-control search-select" asp-items="ViewBag.PublisherId"></select>
                 <span asp-validation-for="PublisherId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -34,9 +35,7 @@
                 <span asp-validation-for="PhotoLink" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ArtistId" class="control-label"></label>
-                <select asp-for="ArtistId" class="form-control" asp-items="ViewBag.ArtistId"></select>
-                <span asp-validation-for="ArtistId" class="text-danger"></span>
+                <input type="hidden" value="@ViewBag.artId" name="ArtistId" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -46,7 +45,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Повернутися до списку","Index", "Albums", new {id = ViewBag.artId, name=ViewBag.ArtistName})
 </div>
 
 @section Scripts {

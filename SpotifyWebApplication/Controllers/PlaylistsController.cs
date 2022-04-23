@@ -31,6 +31,9 @@ namespace SpotifyWebApplication.Controllers
             {
                 return NotFound();
             }
+
+            var playlist = await _context.Playlists.FindAsync(id);
+            if (playlist is null) return NotFound();
             return RedirectToAction("PlaylistDetails", "Songs", new {id = id});
             
         }

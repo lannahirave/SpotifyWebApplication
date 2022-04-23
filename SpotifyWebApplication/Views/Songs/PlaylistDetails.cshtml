@@ -19,6 +19,9 @@
         <th>
             Альбом
         </th>
+        <th>
+            Дододано
+        </th>
         <th></th>
     </tr>
     </thead>
@@ -37,6 +40,12 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Album.Name)
+                </td>
+                <td>
+                    @ViewBag.TimeAdded[ViewBag.iteratorTime]
+                    @{
+                        ViewBag.iteratorTime += 1;
+                    }
                 </td>
                 <td>
                     @Html.ActionLink("Видалити", "DeletePlaylistSong", "Songs", new {songId = item.Id, playlistId = @ViewBag.PlaylistId})

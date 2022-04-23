@@ -27,6 +27,7 @@ namespace SpotifyWebApplication
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string PhotoLink { get; set; }
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
+        [Display(Name = "Артист")]
         public int ArtistId { get; set; }
         [Display(Name = "Артист")]
         public virtual Artist Artist { get; set; }

@@ -26,4 +26,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\PlaylistsSongs\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\PlaylistsSongs\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\PlaylistsSongs\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\PlaylistsSongs\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\PlaylistsSongs\Index.cshtml" />
+  </ItemGroup>
+
 </Project>

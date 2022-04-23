@@ -60,14 +60,13 @@ namespace SpotifyWebApplication.Controllers
         }
 
         // GET: Albums/Create
-        public IActionResult Create(int artistId)
+        public IActionResult Create(int? artistId)
         {
-            // ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name");
-            // Console.ForegroundColor = ConsoleColor.Red;
-            // Console.WriteLine(artistId);
-            // Console.ForegroundColor = ConsoleColor.White;
+            if (artistId is null) return NotFound();
+            var artist = _context.Artists.Find(artistId);
+            if (artist is null) return NotFound();
             ViewBag.ArtistId = artistId;
-            ViewBag.ArtistName = _context.Artists.FirstOrDefault(c => c.Id == artistId)?.Name;
+            ViewBag.ArtistName = artist.Name;
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name");
             return View();
         }
@@ -110,6 +109,10 @@ namespace SpotifyWebApplication.Controllers
             }
             ViewData["ArtistId"] = new SelectList(_context.Artists, "Id", "Name", album.ArtistId);
             ViewData["PublisherId"] = new SelectList(_context.Publishers, "Id", "Name", album.PublisherId);
+            var artist = await _context.Artists.FindAsync(album.ArtistId);
+            @ViewBag.AlbumName = album.Name;
+            @ViewBag.ArtistName = artist!.Name;
+            @ViewBag.artid = artist.Id;
             return View(album);
         }
 
@@ -167,7 +170,10 @@ namespace SpotifyWebApplication.Controllers
             {
                 return NotFound();
             }
-
+            var artist = await _context.Artists.FindAsync(album.ArtistId);
+            @ViewBag.AlbumName = album.Name;
+            @ViewBag.ArtistName = artist!.Name;
+            @ViewBag.artid = artist.Id;
             return View(album);
         }
 
@@ -177,25 +183,15 @@ namespace SpotifyWebApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var album = await _context.Albums.FindAsync(id);
-            /*var songs = _context.Songs.Where(c => c.AlbumId == id);
-            foreach (var song in songs)
-            {
-                var songId = song.Id;
-                var artistssongs = _context.ArtistsSongs.Where(c => c.SongId == songId);
-                foreach (var artsong in artistssongs)
-                {
-                    _context.Remove(artsong);
-                }
-                var playlistsongs = _context.PlaylistsSongs.Where(c => c.SongId == songId);
-                foreach (var playsong in playlistsongs)
-                {
-                    _context.Remove(playsong);
-                }
-                _context.Remove(song);
-            }*/
+            if (album is null) return NotFound();
+            var artistId = album.ArtistId;
+            var artist = await _context.Artists.FindAsync(artistId);
+            var artistName = artist!.Name;
             _context.Albums.Remove(album);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Albums", new {id = artistId, name=artistName});
+
         }
         
 

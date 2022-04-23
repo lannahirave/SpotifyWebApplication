@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SpotifyWebApplication.Models;
@@ -52,9 +51,11 @@ namespace SpotifyWebApplication.Controllers
             //if (playsongs.Count == 0) return View(await _context.Songs.Where(a => a.Id <= 5).ToListAsync());
 
             List<int> songsIds = new();
+            List<string> timeAdded = new();
             foreach (var plsong in playsongs)
             {
                 songsIds.Add(plsong.SongId);
+                timeAdded.Add(plsong.TimeSongAdded.Date.ToShortDateString());
             }
 
             var songs = await _context.Songs
@@ -63,6 +64,8 @@ namespace SpotifyWebApplication.Controllers
             ViewBag.PlaylistId = id;
             ViewBag.songs = songs;
             ViewBag.PlaylistName = playlist.Name;
+            ViewBag.TimeAdded = timeAdded;
+            ViewBag.iteratorTime = 0;
             return View(songs);
         }
 
@@ -93,6 +96,8 @@ namespace SpotifyWebApplication.Controllers
                 var song = await _context.Songs.FirstOrDefaultAsync(c => c.Id == playsong.SongId);
                 if (song is null) return NotFound();
                 var playlist = await _context.Playlists.FirstOrDefaultAsync(c => c.Id == playsong.PlaylistId);
+                var time = DateTimeOffset.UtcNow;
+                playsong.TimeSongAdded = time;
                 _context.Add(playsong);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction("Index", "Songs", new {id = albumId, name = _context.Albums.Where(b => b.Id == albumId).FirstOrDefault().Name});
