@@ -6,6 +6,10 @@
 
 <h1>Пісні @ViewBag.state @ViewBag.AlbumName</h1>
 
+<div class="author-photo">
+    <img src="@ViewBag.LinkToImage" width="240" height="240" alt="Avatar" style="border-radius: 50%;">
+</div>
+
 <p>
     <!-- <a asp-action="Create" asp-route-id="@ViewBag.AlbumId">Додати нову пісню</a> -->
     @Html.ActionLink("Додати нову пісню", "Create", new {albumId = @ViewBag.AlbumId})

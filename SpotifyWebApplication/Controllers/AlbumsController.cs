@@ -34,7 +34,10 @@ namespace SpotifyWebApplication.Controllers
             // finding albums by artist
             ViewBag.ArtistId = id;
             ViewBag.ArtistName = name;
-            var albumsByArtist = _context.Albums.Where(a => a.ArtistId == id).Include(a => a.Artist);
+            var artist = await _context.Artists.FindAsync(id);
+            ViewBag.LinkToImage = artist!.PhotoLink;
+            var albumsByArtist = _context.Albums.Where(a => a.ArtistId == id)
+                .Include(a => a.Artist).Include(a => a.Publisher);
             return View(await albumsByArtist.ToListAsync());
         }
 

@@ -30,6 +30,8 @@ namespace SpotifyWebApplication.Controllers
             ViewBag.state = "альбому";
             var songsByAlbum = _context.Songs.Where(a => a.AlbumId == id).Include(a => a.Album);
             ViewBag.Count = songsByAlbum.Count();
+            var album = await _context.Albums.FindAsync(id);
+            ViewBag.LinkToImage = album!.PhotoLink;
             return View(await songsByAlbum.ToListAsync());
         }
 
@@ -66,6 +68,7 @@ namespace SpotifyWebApplication.Controllers
             ViewBag.PlaylistName = playlist.Name;
             ViewBag.TimeAdded = timeAdded;
             ViewBag.iteratorTime = 0;
+            ViewBag.LinkToImage = playlist.PhotoLink;
             return View(songs);
         }
 
@@ -96,6 +99,13 @@ namespace SpotifyWebApplication.Controllers
                 var song = await _context.Songs.FirstOrDefaultAsync(c => c.Id == playsong.SongId);
                 if (song is null) return NotFound();
                 var playlist = await _context.Playlists.FirstOrDefaultAsync(c => c.Id == playsong.PlaylistId);
+                if (playlist is null) return NotFound();
+                var isThereACopy = await _context.PlaylistsSongs
+                    .FirstOrDefaultAsync(c => c.PlaylistId == playsong.PlaylistId 
+                                              && c.SongId == playsong.SongId);
+                if (isThereACopy is not null)
+                    return RedirectToAction("PlaylistDetails", "Songs",
+                        new {id = playsong.PlaylistId});
                 var time = DateTimeOffset.UtcNow;
                 playsong.TimeSongAdded = time;
                 _context.Add(playsong);

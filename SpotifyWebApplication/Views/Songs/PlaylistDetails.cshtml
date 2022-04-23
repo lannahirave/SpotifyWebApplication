@@ -6,6 +6,9 @@
 
 <h1>@ViewBag.PlaylistName</h1>
 
+<div class="author-photo">
+    <img src="@ViewBag.LinkToImage" width="240" height="240" alt="Avatar" style="border-radius: 50%;">
+</div>
 @Html.ActionLink("Додати пісню", "AddPlaylistSong", "Songs", new {playlistId = ViewBag.PlaylistId})
 <table class="table">
     <thead>
@@ -20,7 +23,7 @@
             Альбом
         </th>
         <th>
-            Дододано
+            Додано
         </th>
         <th></th>
     </tr>
