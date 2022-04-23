@@ -4,9 +4,9 @@
     ViewData["Title"] = "Редагування пісні";
 }
 
-<h1>Edit</h1>
+<h1>Редагування</h1>
 
-<h4>Song</h4>
+<h4>Пісня</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -32,17 +32,18 @@
             *@
             <div class="form-group">
                 <br/>
+                <label class="control-label">Артисти</label>
                     <select asp-for="ArtistsIds" multiple="multiple" class="form-group search-select" asp-items="ViewBag.Artists"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Зберігти" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Повернутися назад", "Index", "Songs" , new {id = ViewBag.AlbumId, name = ViewBag.AlbumName})
 </div>
 
 @section Scripts {

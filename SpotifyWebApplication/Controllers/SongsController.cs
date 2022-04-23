@@ -134,6 +134,10 @@ namespace SpotifyWebApplication.Controllers
                 return NotFound();
             }
 
+            ViewBag.SongName = song.Name;
+            ViewBag.AlbumId = song.AlbumId;
+            var album = await _context.Albums.FindAsync(song.AlbumId);
+            ViewBag.AlbumName = album!.Name;
             return View(song);
         }
 
@@ -187,7 +191,7 @@ namespace SpotifyWebApplication.Controllers
             {
                 return NotFound();
             }
-
+            
             ViewBag.Artists = new MultiSelectList(_context.Artists, "Id", "Name");
             var songEdit = new SongEdit
             {
@@ -197,7 +201,10 @@ namespace SpotifyWebApplication.Controllers
                 AlbumId = song.AlbumId,
                 ArtistsIds = song.Artists.Select(c => c.Id).ToList()
             };
-
+            ViewBag.SongName = songEdit.Name;
+            ViewBag.AlbumId = songEdit.AlbumId;
+            var album = await _context.Albums.FindAsync(songEdit.AlbumId);
+            ViewBag.AlbumName = album!.Name;
             return View(songEdit);
         }
 
@@ -268,7 +275,10 @@ namespace SpotifyWebApplication.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.SongName = song.Name;
+            ViewBag.AlbumId = song.AlbumId;
+            var album = await _context.Albums.FindAsync(song.AlbumId);
+            ViewBag.AlbumName = album!.Name;
             return View(song);
         }
 
