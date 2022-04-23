@@ -1,0 +1,37 @@
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model SpotifyWebApplication.PlaylistsSong
+
+@{
+    ViewData["Title"] = "Додавання пісні";
+}
+
+<h1>Додати пісню до плейлісту @ViewBag.PlaylistName</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddPlaylistSong">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="PlaylistId" type="hidden" value="@ViewBag.PlaylistId" class="form-control" />
+                <span asp-validation-for="PlaylistId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for="SongId" multiple="multiple" class="form-group search-select" asp-items="ViewBag.songs"></select>
+                <span asp-validation-for="SongId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <br/>
+                <input type="submit" value="Додати" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Повернутися до плейлісту", "PlaylistDetails", "Songs", new {id = ViewBag.PlaylistId})
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

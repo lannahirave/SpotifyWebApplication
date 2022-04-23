@@ -31,15 +31,7 @@ namespace SpotifyWebApplication.Controllers
             {
                 return NotFound();
             }
-
-            var playlist = await _context.Playlists
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (playlist == null)
-            {
-                return NotFound();
-            }
-
-            return View(playlist);
+            return RedirectToAction("PlaylistDetails", "Songs", new {id = id});
             
         }
 
@@ -78,6 +70,8 @@ namespace SpotifyWebApplication.Controllers
             {
                 return NotFound();
             }
+
+            @ViewBag.PlaylistName = playlist.Name;
             return View(playlist);
         }
 
@@ -131,6 +125,7 @@ namespace SpotifyWebApplication.Controllers
                 return NotFound();
             }
 
+            ViewBag.PlaylistName = playlist.Name;
             return View(playlist);
         }
 

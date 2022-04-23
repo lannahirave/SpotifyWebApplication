@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SpotifyWebApplication.Song>
+
+@{
+    ViewData["Title"] = @ViewBag.AlbumName;
+}
+
+<h1>@ViewBag.PlaylistName</h1>
+
+@Html.ActionLink("Додати пісню", "AddPlaylistSong", "Songs", new {playlistId = ViewBag.PlaylistId})
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            Назва
+        </th>
+        <th>
+            Довжина
+        </th>
+        <th>
+            Альбом
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model is not null)
+    {
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @(item.Duration / 60):@(item.Duration % 60)
+                    <!-- @Html.DisplayFor(modelItem => item.Duration) -->
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Album.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Видалити", "DeletePlaylistSong", "Songs", new {songId = item.Id, playlistId = @ViewBag.PlaylistId})
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

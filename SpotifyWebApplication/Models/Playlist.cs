@@ -8,7 +8,7 @@ namespace SpotifyWebApplication
     {
         public Playlist()
         {
-            PlaylistsSongs = new HashSet<PlaylistsSong>();
+            //Songs = new HashSet<Song>();
         }
 
         public int Id
@@ -24,10 +24,11 @@ namespace SpotifyWebApplication
         [MaxLength(255)]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string Description { get; set; }
+        [Display(Name="Посилання на фото")]
         [Required(ErrorMessage = "Поле не повинно бути пустим.")]
         public string PhotoLink { get; set; }
 
-        public virtual ICollection<PlaylistsSong> PlaylistsSongs { get; set; }
-        public ICollection<Song> Songs { get; set; }
+        //public virtual ICollection<PlaylistsSong> PlaylistsSongs { get; set; }
+        public ICollection<Song> Songs { get; set; } = new HashSet<Song>();
     }
 }

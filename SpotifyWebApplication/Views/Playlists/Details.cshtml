@@ -1,36 +1,40 @@
 ﻿@model SpotifyWebApplication.Playlist
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Пісні плейлісту";
 }
 
-<h1>Details</h1>
+<h1>@ViewBag.PlaylistName</h1>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Назва
+            </th>
+            <th>
+                Довжина
+            </th>
+            <th>
+                Артист
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (Song item in @ViewBag.songs) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @(item.Duration/60):@(item.Duration % 60)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
 <div>
-    <h4>Playlist</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhotoLink)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhotoLink)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@ViewBag.PlaylistId">Редагувати</a> |
+    <a asp-action="Index"> Повернутися до списку</a>
 </div>

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SpotifyWebApplication;
 using SpotifyWebApplication.Models;
 
 namespace SpotifyWebApplication.Controllers
@@ -22,14 +18,13 @@ namespace SpotifyWebApplication.Controllers
         // GET: Songs
         public async Task<IActionResult> Index(int? id, string name)
         {
-            //var spotifyContext = _context.Songs.Include(s => s.Album);
-            //return View(await spotifyContext.ToListAsync());
             if (id == null)
             {
                 //return RedirectToAction("Artists", "Index"); 
                 var spotifyContext = _context.Songs.Include(a => a.Album);
                 return View(await spotifyContext.ToListAsync());
             }
+
             // finding songs by album
             ViewBag.AlbumId = id;
             ViewBag.AlbumName = name;
@@ -39,6 +34,85 @@ namespace SpotifyWebApplication.Controllers
             return View(await songsByAlbum.ToListAsync());
         }
 
+        //GET:  Songs/PlaylistDetails/5
+        public async Task<IActionResult> PlaylistDetails(int? id)
+        {
+            if (id is null)
+            {
+                return RedirectToPage("Index", "Playlists");
+            }
+
+            var playlist = await _context.Playlists.FirstOrDefaultAsync(a => a.Id == id);
+            if (playlist is null)
+            {
+                return RedirectToPage("Index", "Playlists");
+            }
+
+            var playsongs = await _context.PlaylistsSongs.Where(c => c.PlaylistId == id).ToListAsync();
+            //if (playsongs.Count == 0) return View(await _context.Songs.Where(a => a.Id <= 5).ToListAsync());
+
+            List<int> songsIds = new();
+            foreach (var plsong in playsongs)
+            {
+                songsIds.Add(plsong.SongId);
+            }
+
+            var songs = await _context.Songs
+                .Where(c => songsIds.Contains(c.Id)).Include(a => a.Album).ToListAsync();
+
+            ViewBag.PlaylistId = id;
+            ViewBag.songs = songs;
+            ViewBag.PlaylistName = playlist.Name;
+            return View(songs);
+        }
+
+        // GET: Songs/AddPlaylistSong/5
+        public async Task<IActionResult> AddPlaylistSong(int? playlistId)
+        {
+            if (playlistId is null)
+            {
+                return NotFound();
+            }
+            //ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Name");
+            ViewBag.PlaylistId= playlistId;
+            var playlist = await _context.Playlists.FindAsync(playlistId);
+            if (playlist is null) return NotFound();
+            ViewBag.PlaylistName = playlist.Name;
+            ViewBag.songs = new MultiSelectList(_context.Songs, "Id", "Name");
+            return View();
+        }
+        // POST: Songs/AddPlaylistSong/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPlaylistSong(int albumId, [Bind("Id, PlaylistId, SongId")] PlaylistsSong playsong)
+        {
+            if (ModelState.IsValid)
+            {
+                var song = await _context.Songs.FirstOrDefaultAsync(c => c.Id == playsong.SongId);
+                if (song is null) return NotFound();
+                var playlist = await _context.Playlists.FirstOrDefaultAsync(c => c.Id == playsong.PlaylistId);
+                _context.Add(playsong);
+                await _context.SaveChangesAsync();
+                //return RedirectToAction("Index", "Songs", new {id = albumId, name = _context.Albums.Where(b => b.Id == albumId).FirstOrDefault().Name});
+            }
+            return RedirectToAction("PlaylistDetails", "Songs", new {id = playsong.PlaylistId});
+            
+        }
+
+        // GET: Songs/DeletePlaylistSong/5
+        public async Task<IActionResult> DeletePlaylistSong(int? playlistId, int? songId)
+        {
+            if (playlistId is null || songId is null) return NotFound();
+            var playSong = await _context.PlaylistsSongs
+                .FirstOrDefaultAsync(c => c.PlaylistId == playlistId && c.SongId == songId);
+            if (playSong is null) return NotFound();
+            _context.PlaylistsSongs.Remove(playSong);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("PlaylistDetails", "Songs", new {id = playlistId});
+        }
+        
         // GET: Songs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -63,7 +137,7 @@ namespace SpotifyWebApplication.Controllers
         {
             //ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Name");
             ViewBag.AlbumId = albumId;
-            ViewBag.AlbumName = _context.Albums.Where(a => a.Id == albumId).FirstOrDefault().Name;
+            ViewBag.AlbumName = _context.Albums.FirstOrDefault(a => a.Id == albumId)?.Name;
             return View();
         }
 
@@ -86,12 +160,13 @@ namespace SpotifyWebApplication.Controllers
                 _context.Add(song);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
-                //return RedirectToAction("Index", "Songs", new {id = albumId, name = _context.Albums.Where(b => b.Id == albumId).FirstOrDefault().Name});
+                return RedirectToAction("Index", "Songs", new {id = albumId, name = album.Name});
             }
+
             //ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Name", song.AlbumId);
             //return View(song);
-            return RedirectToAction("Index", "Songs", new { id = albumId, name = _context.Albums.FirstOrDefault(b => b.Id == albumId)?.Name });
-
+            return RedirectToAction("Index", "Songs",
+                new {id = albumId, name = _context.Albums.FirstOrDefault(b => b.Id == albumId)?.Name});
         }
 
         // GET: Songs/Edit/5
@@ -102,11 +177,12 @@ namespace SpotifyWebApplication.Controllers
                 return NotFound();
             }
 
-            var song = await _context.Songs.Include(c=> c.Artists).FirstOrDefaultAsync(c => c.Id == id);
+            var song = await _context.Songs.Include(c => c.Artists).FirstOrDefaultAsync(c => c.Id == id);
             if (song == null)
             {
                 return NotFound();
             }
+
             ViewBag.Artists = new MultiSelectList(_context.Artists, "Id", "Name");
             var songEdit = new SongEdit
             {
@@ -123,7 +199,7 @@ namespace SpotifyWebApplication.Controllers
         // POST: Songs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, SongEdit songEdit)
@@ -132,7 +208,7 @@ namespace SpotifyWebApplication.Controllers
             {
                 return NotFound();
             }
-            
+
             if (ModelState.IsValid)
             {
                 var song = await _context.Songs.Include(c => c.Artists).FirstOrDefaultAsync(d => d.Id == songEdit.Id);
@@ -161,8 +237,13 @@ namespace SpotifyWebApplication.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                var album = await _context.Albums.FirstOrDefaultAsync(c => c.Id == song.AlbumId);
+                var albumName = album!.Name;
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index","Songs",  new {id = song.AlbumId, name=albumName});
             }
+
             ViewData["AlbumId"] = new SelectList(_context.Albums, "Id", "Name", songEdit.AlbumId);
             return View(songEdit);
         }
@@ -192,9 +273,13 @@ namespace SpotifyWebApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var song = await _context.Songs.FindAsync(id);
+            if (song is null) return NotFound();
+            var albumId = song.AlbumId;
+            var album = await _context.Albums.FirstOrDefaultAsync(c => c.Id == albumId);
+            var albumName = album!.Name;
             _context.Songs.Remove(song);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index","Songs",  new {id = albumId, name=albumName});
         }
 
         private bool SongExists(int id)
