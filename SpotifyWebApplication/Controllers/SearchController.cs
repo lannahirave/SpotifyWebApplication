@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Dynamic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SpotifyWebApplication.Models;
 
 namespace SpotifyWebApplication.Controllers
 {
@@ -14,14 +13,27 @@ namespace SpotifyWebApplication.Controllers
             _context = context;
         }
 
-        // GET
-        public async Task<IActionResult> Index(string searchValue)
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
+
+        // GET: SEARCH/
+        public async Task<IActionResult> Search(string searchValue)
         {
             if (searchValue is null || searchValue.Length == 0) return RedirectToAction("Index", "Home");
-            var songs = await _context.Songs.Where(a => a.Name.Contains(searchValue)).Include(d => d.Album).ToListAsync();
-            var albums = await _context.Albums.Where(a => a.Name.Contains(searchValue)).Include(d => d.Publisher).ToListAsync();
+            var songs = await _context.Songs.Where(a => a.Name.Contains(searchValue))
+                .Include(d => d.Album).Include(a => a.Artists).ToListAsync();
+            var albums = await _context.Albums.Where(a => a.Name.Contains(searchValue))
+                .Include(d => d.Publisher).Include(a => a.Artist).ToListAsync();
             var artists = await _context.Artists.Where(a => a.Name.Contains(searchValue)).ToListAsync();
-            return View();
+            var playlists = await _context.Playlists.Where(a => a.Name.Contains(searchValue)).ToListAsync();
+            dynamic myModel = new ExpandoObject();
+            myModel.Songs = songs;
+            myModel.Albums = albums;
+            myModel.Artists = artists;
+            myModel.Playlists = playlists;
+            return View(myModel);
         }
     }
 }

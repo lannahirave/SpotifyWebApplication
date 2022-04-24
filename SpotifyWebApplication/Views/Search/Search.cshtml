@@ -1,0 +1,118 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "Пошук";
+    Layout = "_Layout";
+}
+
+@{
+    if (Model.Songs.Count != 0)
+    {
+        <h2>Пісні</h2>
+        <table class="table">
+            <tbody>
+            @foreach (Song song in Model.Songs)
+            {
+                <tr>
+                    <td>
+                        <img src="@song.Album.PhotoLink" width="20" height="20" alt="" style="border-radius: 50%;">
+                        @Html.ActionLink(song.Name, "Index", "Songs",
+                            new {id = song.AlbumId})
+                    </td>
+                    @{
+                        if (song.Artists.Count != 0)
+                        {
+                            <td>
+                                @foreach (Artist artist in song.Artists)
+                                {
+                                    <img src="@artist.PhotoLink" width="20" height="20" alt="" style="border-radius: 50%;">
+                                    @Html.ActionLink(artist.Name, "Index", "Albums",
+                                        new {id = artist.Id})
+                                }
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    if (Model.Albums.Count != 0)
+    {
+        <br/>
+        <h2>Альбоми</h2>
+        <table class="table">
+            <tbody>
+            @foreach (Album album in Model.Albums)
+            {
+                <tr>
+                    <td>
+                        <img src="@album.PhotoLink" width="20" height="20" alt="" style="border-radius: 50%;">
+                        @Html.ActionLink(album.Name, "Index", "Songs",
+                            new {id = album.Id})
+                    </td>
+                    @{
+                        if (album.Artist is not null)
+                        {
+                            <td>
+                                <img src="@album.Artist.PhotoLink" width="20" height="20" alt="" style="border-radius: 50%;">
+                                @Html.ActionLink(album.Artist.Name, "Index", "Albums",
+                                    new {id = album.Artist.Id})
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    if (Model.Artists.Count != 0)
+    {
+        <br/>
+        <h2>Артисти</h2>
+        <table class="table">
+            <tbody>
+            @foreach (Artist artist in Model.Artists)
+            {
+                <tr>
+                    <td>
+                        <img src="@artist.PhotoLink" width="20" height="20" alt="" style="border-radius: 50%;">
+                        @Html.ActionLink(artist.Name, "Index", "Albums",
+                            new {id = artist.Id})
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    if (Model.Playlists.Count != 0)
+    {
+        <br/>
+        <h2>Плейлисти</h2>
+        <table class="table">
+            <tbody>
+            @foreach (Playlist playlist in Model.Playlists)
+            {
+                <tr>
+                    <td>
+                        <img src="@playlist.PhotoLink" width="20" height="20" alt="" style="border-radius: 50%;">
+                        @Html.ActionLink(playlist.Name, "PlaylistDetails", "Songs",
+                            new {id = playlist.Id})
+                    </td>
+                    <td>
+                        @(playlist.Description)
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    if (Model.Songs.Count + Model.Albums.Count + Model.Artists.Count + Model.Playlists.Count == 0)
+    {
+        <h2> Нічого не знайдено :(</h2>
+        <br/>
+        <h4>@Html.ActionLink("Повернутися", "Index", "Search")</h4>
+    }
+}
