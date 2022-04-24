@@ -29,6 +29,7 @@ namespace SpotifyWebApplication.Controllers
             if (id == null) {
                 //return RedirectToAction("Artists", "Index"); 
                 var spotifyContext = _context.Albums.Include(a => a.Artist).Include(a => a.Publisher);
+                ViewBag.LinkToImage = "https://i.giphy.com/media/blSTtZehjAZ8I/giphy.webp";
                 return View(await spotifyContext.ToListAsync());
             }
             // finding albums by artist

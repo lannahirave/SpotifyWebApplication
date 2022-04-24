@@ -1,7 +1,21 @@
 html {
   font-size: 14px;
 }
-
+.inputSearch {
+    background-image: linear-gradient(to right, #11998e, #38ef7d);
+    border-radius: 0.5rem;
+    border-image: linear-gradient(to right, #11998e, #38ef7d);
+    margin-top: 5px;
+    
+}
+.btn-search{
+    color: black;
+    top: 50%;
+    background-image: linear-gradient(to right, #11998e, #38ef7d);
+    border-radius: 0.5rem;
+    text-align: center;
+    border-image: linear-gradient(to right, #11998e, #38ef7d);
+}
 @media (min-width: 768px) {
   html {
     font-size: 16px;

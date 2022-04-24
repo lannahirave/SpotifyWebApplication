@@ -21,16 +21,20 @@ namespace SpotifyWebApplication.Controllers
             {
                 //return RedirectToAction("Artists", "Index"); 
                 var spotifyContext = _context.Songs.Include(a => a.Album);
+                ViewBag.LinkToImage =
+                    "https://media1.giphy.com/media/FWi1f9Wn2hubC/giphy.gif?cid=ecf05e477gdrycn27bdy42yqyhzlafxb9qahf9jydk9k5exx&rid=giphy.gif&ct=g";
                 return View(await spotifyContext.ToListAsync());
             }
 
             // finding songs by album
             ViewBag.AlbumId = id;
-            ViewBag.AlbumName = name;
+            
             ViewBag.state = "альбому";
-            var songsByAlbum = _context.Songs.Where(a => a.AlbumId == id).Include(a => a.Album);
+            var songsByAlbum = _context.Songs.Where(a => a.AlbumId == id)
+                .Include(a => a.Album);
             ViewBag.Count = songsByAlbum.Count();
             var album = await _context.Albums.FindAsync(id);
+            ViewBag.AlbumName = album.Name;
             ViewBag.LinkToImage = album!.PhotoLink;
             return View(await songsByAlbum.ToListAsync());
         }

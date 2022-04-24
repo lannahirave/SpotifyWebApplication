@@ -1,8 +1,77 @@
-﻿
-
+﻿<style>
+	.btn-search{
+		background-image: linear-gradient(to right, #11998e, #38ef7d)
+	}
+    .form__group {
+    	 position: relative;
+    	 padding: 15px 0 0;
+    	 margin-top: 10px;
+    	 width: 50%;
+    }
+     .form__field {
+    	 font-family: inherit;
+    	 width: 100%;
+    	 border: 0;
+    	 border-bottom: 2px solid #9b9b9b;
+    	 outline: 0;
+    	 font-size: 1.3rem;
+    	 color: #fff;
+    	 padding: 7px 0;
+    	 background: transparent;
+    	 transition: border-color 0.2s;
+    }
+     .form__field::placeholder {
+    	 color: transparent;
+    }
+     .form__field:placeholder-shown ~ .form__label {
+    	 font-size: 1.3rem;
+    	 cursor: text;
+    	 top: 20px;
+    }
+     .form__label {
+    	 position: absolute;
+    	 top: 0;
+    	 display: block;
+    	 transition: 0.2s;
+    	 font-size: 1rem;
+    	 color: #9b9b9b;
+    }
+     .form__field:focus {
+    	 padding-bottom: 6px;
+    	 font-weight: 700;
+    	 border-width: 3px;
+    	 border-image: linear-gradient(to right, #11998e, #38ef7d);
+    	 border-image-slice: 1;
+    }
+     .form__field:focus ~ .form__label {
+    	 position: absolute;
+    	 top: 0;
+    	 display: block;
+    	 transition: 0.2s;
+    	 font-size: 1rem;
+    	 color: #11998e;
+    	 font-weight: 700;
+    }
+    /* reset input */
+     .form__field:required, .form__field:invalid {
+    	 box-shadow: none;
+    }     
+</style>
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
+<div style="text-align: center;">
+    <form asp-action="Search">
+        <div class="form-group" >
+            <h2>Пошук</h2>
+	        <input asp-controller="Search" class="form__field" placeholder="Введіть запит" type="text" id="searchValue" 
+	               name="searchValue" required minlength="1"  size="20" >
+        </div>
+	    <div class="form-group">
+		    <br/>
+		    <input type="submit" value="Пошук" class="btn btn-primary btn-search" color="#9b9b9b"/>
+	    </div>
+    </form>
+</div>
 
-<h2>title</h2>

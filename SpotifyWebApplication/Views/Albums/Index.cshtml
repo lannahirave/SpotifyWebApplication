@@ -7,7 +7,7 @@
 <h1>Альбоми @ViewBag.ArtistName</h1>
 
 <div class="author-photo">
-    <img src="@ViewBag.LinkToImage" width="240" height="240" alt="Avatar" style="border-radius: 50%;">
+    <img src="@ViewBag.LinkToImage" width="240" height="240" alt="" style="border-radius: 50%;">
 </div>
 <p>
     <!-- <a asp-action="Create" asp-route-id="@ViewBag.ArtistId">Додати новий альбом</a> -->
@@ -39,7 +39,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                <a asp-action="Details" asp-route-id="@item.Id">
+                    <img src="@item.PhotoLink" width="20" height="20" alt="" style="border-radius: 50%;">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Artist.Name)

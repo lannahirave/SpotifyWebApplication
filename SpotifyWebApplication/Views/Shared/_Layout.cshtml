@@ -35,6 +35,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Publishers" asp-action="Index">Релізери</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Search" asp-action="Index">Пошук</a>
+                        </li>
+                        <li class="nav-item">
+                            <form asp-action="Search" asp-controller="Search">
+                                <div class="form-group" style="display: inline; top: 50%;">
+                                    <input class="inputSearch" type="text" id="searchValue"
+                                           name="searchValue" required
+                                           minlength="1" size="20">
+                                    <input type="submit" value="Пошук" class="btn-search"/>
+                                </div>
+                            </form>
+                        </li>
                     </ul>
                 </div>
                 
