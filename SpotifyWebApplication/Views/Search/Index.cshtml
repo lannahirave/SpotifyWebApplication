@@ -63,15 +63,14 @@
 }
 <div style="text-align: center;">
     <form asp-action="Search">
-        <div class="form-group" >
+        <div class="form-group">
             <h2>Пошук</h2>
-	        <input asp-controller="Search" class="form__field" placeholder="Введіть запит" type="text" id="searchValue" 
-	               name="searchValue" required minlength="1"  size="20" >
+            <input asp-controller="Search" class="form__field" placeholder="Введіть запит" type="text" id="searchValue"
+                   name="searchValue" required minlength="1" size="20">
         </div>
-	    <div class="form-group">
-		    <br/>
-		    <input type="submit" value="Пошук" class="btn btn-primary btn-search" color="#9b9b9b"/>
-	    </div>
+        <div class="form-group">
+            <br/>
+            <input type="submit" value="Пошук" class="btn btn-primary btn-search" color="#9b9b9b"/>
+        </div>
     </form>
 </div>
-

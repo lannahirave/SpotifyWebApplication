@@ -7,145 +7,125 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SpotifyWebApplication;
 
-namespace SpotifyWebApplication.Controllers
+namespace SpotifyWebApplication.Controllers;
+
+public class PlaylistsController : Controller
 {
-    public class PlaylistsController : Controller
+    private readonly spotifyContext _context;
+
+    public PlaylistsController(spotifyContext context)
     {
-        private readonly spotifyContext _context;
+        _context = context;
+    }
 
-        public PlaylistsController(spotifyContext context)
+    // GET: Playlists
+    public async Task<IActionResult> Index()
+    {
+        return View(await _context.Playlists.ToListAsync());
+    }
+
+    // GET: Playlists/Details/5
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var playlist = await _context.Playlists.FindAsync(id);
+        if (playlist is null) return NotFound();
+        return RedirectToAction("PlaylistDetails", "Songs", new {id = id});
+    }
+
+    // GET: Playlists/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    // POST: Playlists/Create
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Id,Name,Description,PhotoLink")] Playlist playlist)
+    {
+        if (ModelState.IsValid)
         {
-            _context = context;
-        }
-
-        // GET: Playlists
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Playlists.ToListAsync());
-        }
-
-        // GET: Playlists/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var playlist = await _context.Playlists.FindAsync(id);
-            if (playlist is null) return NotFound();
-            return RedirectToAction("PlaylistDetails", "Songs", new {id = id});
-            
-        }
-
-        // GET: Playlists/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Playlists/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,PhotoLink")] Playlist playlist)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(playlist);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(playlist);
-        }
-
-        // GET: Playlists/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var playlist = await _context.Playlists.FindAsync(id);
-            if (playlist == null)
-            {
-                return NotFound();
-            }
-
-            @ViewBag.PlaylistName = playlist.Name;
-            return View(playlist);
-        }
-
-        // POST: Playlists/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,PhotoLink")] Playlist playlist)
-        {
-            if (id != playlist.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(playlist);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PlaylistExists(playlist.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(playlist);
-        }
-
-        // GET: Playlists/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var playlist = await _context.Playlists
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (playlist == null)
-            {
-                return NotFound();
-            }
-
-            ViewBag.PlaylistName = playlist.Name;
-            return View(playlist);
-        }
-
-        // POST: Playlists/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var playlist = await _context.Playlists.FindAsync(id);
-            _context.Playlists.Remove(playlist);
+            _context.Add(playlist);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PlaylistExists(int id)
+        return View(playlist);
+    }
+
+    // GET: Playlists/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var playlist = await _context.Playlists.FindAsync(id);
+        if (playlist == null) return NotFound();
+
+        @ViewBag.PlaylistName = playlist.Name;
+        return View(playlist);
+    }
+
+    // POST: Playlists/Edit/5
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,PhotoLink")] Playlist playlist)
+    {
+        if (id != playlist.Id) return NotFound();
+
+        if (ModelState.IsValid)
         {
-            return _context.Playlists.Any(e => e.Id == id);
+            try
+            {
+                _context.Update(playlist);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PlaylistExists(playlist.Id))
+                    return NotFound();
+                else
+                    throw;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
+
+        return View(playlist);
+    }
+
+    // GET: Playlists/Delete/5
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var playlist = await _context.Playlists
+            .FirstOrDefaultAsync(m => m.Id == id);
+        if (playlist == null) return NotFound();
+
+        ViewBag.PlaylistName = playlist.Name;
+        return View(playlist);
+    }
+
+    // POST: Playlists/Delete/5
+    [HttpPost]
+    [ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var playlist = await _context.Playlists.FindAsync(id);
+        _context.Playlists.Remove(playlist);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    private bool PlaylistExists(int id)
+    {
+        return _context.Playlists.Any(e => e.Id == id);
     }
 }

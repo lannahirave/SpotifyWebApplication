@@ -9,31 +9,31 @@
 <h3>Впевнені, що хочете видалити? :(</h3>
 <div>
     <h4>@ViewBag.SongName</h4>
-    <hr />
+    <hr/>
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Duration)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Duration)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Album)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Album.Name)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Видалити" class="btn btn-danger" /> |
-        @Html.ActionLink("Повернутися назад", "Index", "Songs" , new {id = ViewBag.AlbumId, name = ViewBag.AlbumName})
+        <input type="hidden" asp-for="Id"/>
+        <input type="submit" value="Видалити" class="btn btn-danger"/> |
+        @Html.ActionLink("Повернутися назад", "Index", "Songs", new {id = ViewBag.AlbumId, name = ViewBag.AlbumName})
     </form>
 </div>

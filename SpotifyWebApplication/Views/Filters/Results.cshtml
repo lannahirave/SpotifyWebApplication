@@ -1,11 +1,11 @@
 ﻿@model dynamic
 @{
-    ViewBag.Title = "Пошук";
+    ViewBag.Title = "Фільтри";
     Layout = "_Layout";
 }
 
 @{
-    if (Model.Songs.Count != 0)
+    if (Model.Songs is not null && Model.Songs?.Count != 0)
     {
         <h2>Пісні</h2>
         <table class="table">
@@ -37,7 +37,7 @@
         </table>
     }
 
-    if (Model.Albums.Count != 0)
+    if (Model.Albums is not null && Model.Albums?.Count != 0)
     {
         <br/>
         <h2>Альбоми</h2>
@@ -67,7 +67,7 @@
         </table>
     }
 
-    if (Model.Artists.Count != 0)
+    if (Model.Artists is not null && Model.Artists?.Count != 0)
     {
         <br/>
         <h2>Артисти</h2>
@@ -87,7 +87,7 @@
         </table>
     }
 
-    if (Model.Playlists.Count != 0)
+    if (Model.Playlists is not null && Model.Playlists?.Count != 0)
     {
         <br/>
         <h2>Плейлисти</h2>
@@ -116,6 +116,6 @@
     {
         <h2> Нічого не знайдено :(</h2>
         <br/>
-        <h4>@Html.ActionLink("Повернутися", "Index", "Search")</h4>
+        <h4>@Html.ActionLink("Повернутися", "Index", "Filters")</h4>
     }
 }

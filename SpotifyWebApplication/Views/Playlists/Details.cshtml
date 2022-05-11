@@ -8,30 +8,31 @@
 
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                Назва
-            </th>
-            <th>
-                Довжина
-            </th>
-            <th>
-                Артист
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            Назва
+        </th>
+        <th>
+            Довжина
+        </th>
+        <th>
+            Артист
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (Song item in @ViewBag.songs) {
+    @foreach (Song item in @ViewBag.songs)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @(item.Duration/60):@(item.Duration % 60)
+                @(item.Duration / 60):@(item.Duration % 60)
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
 <div>

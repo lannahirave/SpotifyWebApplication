@@ -7,13 +7,13 @@
 
 <h1>Додати пісню до плейлісту @ViewBag.PlaylistName</h1>
 
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="AddPlaylistSong">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="PlaylistId" type="hidden" value="@ViewBag.PlaylistId" class="form-control" />
+                <input asp-for="PlaylistId" type="hidden" value="@ViewBag.PlaylistId" class="form-control"/>
                 <span asp-validation-for="PlaylistId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,5 +33,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

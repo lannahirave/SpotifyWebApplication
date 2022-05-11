@@ -7,20 +7,20 @@
 <h1>Редагування</h1>
 
 <h4>Пісня</h4>
-<hr />
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Id"/>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
+                <input asp-for="Duration" class="form-control"/>
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
             @*
@@ -33,19 +33,19 @@
             <div class="form-group">
                 <br/>
                 <label class="control-label">Артисти</label>
-                    <select asp-for="ArtistsIds" multiple="multiple" class="form-group search-select" asp-items="ViewBag.Artists"></select>
+                <select asp-for="ArtistsIds" multiple="multiple" class="form-group search-select" asp-items="ViewBag.Artists"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Зберігти" class="btn btn-primary" />
+                <input type="submit" value="Зберігти" class="btn btn-primary"/>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    @Html.ActionLink("Повернутися назад", "Index", "Songs" , new {id = ViewBag.AlbumId, name = ViewBag.AlbumName})
+    @Html.ActionLink("Повернутися назад", "Index", "Songs", new {id = ViewBag.AlbumId, name = ViewBag.AlbumName})
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
