@@ -1,30 +1,25 @@
 ﻿using System.Data;
 using System.Dynamic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace SpotifyWebApplication.Controllers;
 
 public class FiltersController : Controller
 {
-    private readonly spotifyContext _context; //NEVER USED BUT WE NEVER GIVE UP
+    //private readonly spotifyContext _context; //NEVER USED BUT WE NEVER GIVE UP
     private readonly string _connectionString;
 
     public FiltersController(spotifyContext context)
     {
-        _context = context;
         _connectionString = context.Database.GetConnectionString();
     }
-
-
+    
     // GET
     public IActionResult Index()
     {
-        var classes = new List<object>() {"Артисти", "Альбоми", "Пісні", "Релізери", "Плейлісти"};
-        @ViewBag.ClassesForFirstFilter = new SelectList(classes);
         return View();
     }
 
@@ -40,14 +35,14 @@ public class FiltersController : Controller
             db.QueryAsync<Artist>(
                 "SELECT * FROM Artists WHERE id IN (SELECT ArtistId FROM Albums WHERE id in (SELECT AlbumId FROM Songs WHERE Name=@songName));",
                 new {songName});
-        return Results(artists, null, null, null);
+        return Results(artists : artists);
     }
 
     // POST: Filters/Filter2
     public async Task<IActionResult> Filter2(string min02, string sec02)
     {
         //Знайти альбоми, у яких середня довжина пісні більше
-        if (min02 is null && sec02 is null) return RedirectToAction("Index");
+        if (min02 is null || sec02 is null) return RedirectToAction("Index");
 
         var time = Convert.ToInt32(min02) * 60 + Convert.ToInt32(sec02);
         using IDbConnection db = new SqlConnection(_connectionString);
@@ -60,14 +55,14 @@ public class FiltersController : Controller
         FROM songs
         WHERE albumId=albums.Id) > @time",
                 new {time});
-        return Results(null, albums, null, null);
+        return Results(albums : albums);
     }
 
     // POST: Filters/Filter3
     public async Task<IActionResult> Filter3(string min03, string sec03)
     {
         //Знайти плейлісти, у яких довжина більше
-        if (min03 is null && sec03 is null) return RedirectToAction("Index");
+        if (min03 is null || sec03 is null) return RedirectToAction("Index");
 
         var time = Convert.ToInt32(min03) * 60 + Convert.ToInt32(sec03);
         using IDbConnection db = new SqlConnection(_connectionString);
@@ -84,7 +79,7 @@ GROUP BY p.id,
 HAVING SUM(duration) > @time
 ORDER BY p.Name;",
                 new {time});
-        return Results(null, null, null, playlists);
+        return Results(playlists: playlists);
     }
 
     public async Task<IActionResult> Filter4(string number)
@@ -111,7 +106,7 @@ ORDER BY p.Name;",
                 },
                 new {amount},
                 splitOn: "AlbId");
-        return Results(null, null, songs, null);
+        return Results(songs : songs);
     }
 
     public async Task<IActionResult> Filter5(string publisherName)
@@ -134,7 +129,7 @@ ORDER BY p.Name;",
                 new {publisherName},
                 splitOn: "PubId");
 
-        return Results(null, albums, null, null);
+        return Results(albums : albums);
     }
 
     public async Task<IActionResult> Filter6(string amountSongs)
@@ -189,11 +184,28 @@ WHERE Not exists
         return Results(playlists: playlists);
     }
 
-    public async Task<IActionResult> Filter8(string number)
+    public async Task<IActionResult> Filter8(string numberSongs, string numberArtists)
     {
-        // знайти альбоми, у яких number пісень з к-стю артистів > 1
-        
-        return Results();
+        // знайти альбоми, у яких numberSongs пісень з к-стю артистів > numberArtists
+        if (numberSongs is null || numberArtists is null) return RedirectToAction("Index");
+        int amountSongs = Convert.ToInt32(numberSongs);
+        int amountArtists = Convert.ToInt32(numberArtists);
+
+        using IDbConnection db = new SqlConnection(_connectionString);
+        var albums = await db.QueryAsync<Album>(@"WITH songsWithManyArtists AS
+  (SELECT *
+   FROM songs
+   WHERE
+       (SELECT count(DISTINCT ArtistId)
+        FROM Artists_songs
+        WHERE SongId = songs.Id ) > @amountArtists )
+SELECT Albums.*
+FROM Albums
+WHERE
+    (SELECT count(DISTINCT songsWithManyArtists.id)
+     FROM songsWithManyArtists
+     WHERE songsWithManyArtists.AlbumId = Albums.Id ) > @amountSongs", new {amountArtists, amountSongs});
+        return Results(albums: albums);
     }
 
     public IActionResult Results(IEnumerable<Artist> artists = null, IEnumerable<Album> albums = null, 
