@@ -79,7 +79,7 @@ public class SongsController : Controller
         var playlist = await _context.Playlists.FindAsync(playlistId);
         if (playlist is null) return NotFound();
         ViewBag.PlaylistName = playlist.Name;
-        ViewBag.songs = new MultiSelectList(_context.Songs, "Id", "Name");
+        ViewBag.songs = new SelectList(_context.Songs, "Id", "Name");
         return View();
     }
 

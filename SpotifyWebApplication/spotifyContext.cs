@@ -69,25 +69,6 @@ public partial class spotifyContext : DbContext
                 .HasMaxLength(255);
         });
 
-        /*modelBuilder.Entity<ArtistsSong>(entity =>
-        {
-            entity.ToTable("Artists_songs");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-
-            entity.HasOne(d => d.Artist)
-                .WithMany(p => p.ArtistsSongs)
-                .HasForeignKey(d => d.ArtistId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("artists_songs_artistid_foreign");
-
-            entity.HasOne(d => d.Song)
-                .WithMany(p => p.ArtistsSongs)
-                .HasForeignKey(d => d.SongId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("artists_songs_songid_foreign");
-        });*/
-
         modelBuilder.Entity<Playlist>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("id");
@@ -124,26 +105,7 @@ public partial class spotifyContext : DbContext
                         .Property(x => x.Id)
                 );
         });
-
-        /*modelBuilder.Entity<PlaylistsSong>(entity =>
-        {
-            entity.ToTable("Playlists_songs");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-
-            entity.HasOne(d => d.Playlist)
-                .WithMany(p => p.PlaylistsSongs)
-                .HasForeignKey(d => d.PlaylistId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("playlists_songs_playlistid_foreign");
-
-            entity.HasOne(d => d.Song)
-                .WithMany(p => p.PlaylistsSongs)
-                .HasForeignKey(d => d.SongId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("playlists_songs_songid_foreign");
-        });*/
-
+        
         modelBuilder.Entity<Publisher>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("id");
@@ -174,13 +136,13 @@ public partial class spotifyContext : DbContext
                         .HasOne(d => d.Artist)
                         .WithMany()
                         .HasForeignKey(d => d.ArtistId)
-                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .HasConstraintName("artists_songs_artistid_foreign"),
                     configureRight => configureRight
                         .HasOne(d => d.Song)
                         .WithMany()
                         .HasForeignKey(d => d.SongId)
-                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .HasConstraintName("artists_songs_songid_foreign"),
                     builder => builder
                         .ToTable("Artists_songs")

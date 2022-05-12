@@ -9,14 +9,15 @@ namespace SpotifyWebApplication.Controllers;
 
 public class FiltersController : Controller
 {
-    //private readonly spotifyContext _context; //NEVER USED BUT WE NEVER GIVE UP
+    private readonly spotifyContext _context; //NEVER USED BUT WE NEVER GIVE UP
     private readonly string _connectionString;
 
     public FiltersController(spotifyContext context)
     {
+        _context = context;
         _connectionString = context.Database.GetConnectionString();
     }
-    
+
     // GET
     public IActionResult Index()
     {
@@ -35,7 +36,7 @@ public class FiltersController : Controller
             db.QueryAsync<Artist>(
                 "SELECT * FROM Artists WHERE id IN (SELECT ArtistId FROM Albums WHERE id in (SELECT AlbumId FROM Songs WHERE Name=@songName));",
                 new {songName});
-        return Results(artists : artists);
+        return Results(artists);
     }
 
     // POST: Filters/Filter2
@@ -55,7 +56,7 @@ public class FiltersController : Controller
         FROM songs
         WHERE albumId=albums.Id) > @time",
                 new {time});
-        return Results(albums : albums);
+        return Results(albums: albums);
     }
 
     // POST: Filters/Filter3
@@ -106,7 +107,7 @@ ORDER BY p.Name;",
                 },
                 new {amount},
                 splitOn: "AlbId");
-        return Results(songs : songs);
+        return Results(songs: songs);
     }
 
     public async Task<IActionResult> Filter5(string publisherName)
@@ -129,14 +130,14 @@ ORDER BY p.Name;",
                 new {publisherName},
                 splitOn: "PubId");
 
-        return Results(albums : albums);
+        return Results(albums: albums);
     }
 
     public async Task<IActionResult> Filter6(string amountSongs)
     {
         // Знайти усіх артистів, у яких кількість пісень
         if (amountSongs is null) return RedirectToAction("Index");
-        int amount = Convert.ToInt32(amountSongs);
+        var amount = Convert.ToInt32(amountSongs);
         using IDbConnection db = new SqlConnection(_connectionString);
         var artists = await
             db.QueryAsync<Artist>(
@@ -153,6 +154,7 @@ WHERE x.ams = @amount;",
 
         return Results(artists);
     }
+
     public async Task<IActionResult> Filter7(string artistName)
     {
         // Знайти усі плейлісти, в яких є всі пісні автора 
@@ -161,7 +163,6 @@ WHERE x.ams = @amount;",
         var artist = await
             db.QueryFirstOrDefaultAsync<Artist>(
                 @"SELECT * FROM Artists WHERE Name=@artistName",
-
                 new {artistName});
         if (artist is null) return Results(null, null, null, null);
         var playlists = await db.QueryAsync<Playlist>(@"
@@ -177,10 +178,10 @@ WHERE Not exists
          (SELECT *
           FROM playlists_songs pls
           WHERE pls.songid = artistSongIds.songs
-            AND pls.playlistid = playlists.id ))", 
+            AND pls.playlistid = playlists.id ))",
             new {artistId = artist.Id}
         );
-    
+
         return Results(playlists: playlists);
     }
 
@@ -188,8 +189,8 @@ WHERE Not exists
     {
         // знайти альбоми, у яких numberSongs пісень з к-стю артистів > numberArtists
         if (numberSongs is null || numberArtists is null) return RedirectToAction("Index");
-        int amountSongs = Convert.ToInt32(numberSongs);
-        int amountArtists = Convert.ToInt32(numberArtists);
+        var amountSongs = Convert.ToInt32(numberSongs);
+        var amountArtists = Convert.ToInt32(numberArtists);
 
         using IDbConnection db = new SqlConnection(_connectionString);
         var albums = await db.QueryAsync<Album>(@"WITH songsWithManyArtists AS
@@ -204,12 +205,12 @@ FROM Albums
 WHERE
     (SELECT count(DISTINCT songsWithManyArtists.id)
      FROM songsWithManyArtists
-     WHERE songsWithManyArtists.AlbumId = Albums.Id ) > @amountSongs", new {amountArtists, amountSongs});
+     WHERE songsWithManyArtists.AlbumId = Albums.Id ) > @amountSongs;", new {amountArtists, amountSongs});
         return Results(albums: albums);
     }
 
-    public IActionResult Results(IEnumerable<Artist> artists = null, IEnumerable<Album> albums = null, 
-        IEnumerable<Song> songs= null, IEnumerable<Playlist> playlists= null)
+    public IActionResult Results(IEnumerable<Artist> artists = null, IEnumerable<Album> albums = null,
+        IEnumerable<Song> songs = null, IEnumerable<Playlist> playlists = null)
     {
         dynamic myModel = new ExpandoObject();
         myModel.Songs = songs;

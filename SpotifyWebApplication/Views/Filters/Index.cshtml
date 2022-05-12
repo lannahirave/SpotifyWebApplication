@@ -9,7 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Filter1">
-            <p> 1.Знайти артистів, яким належить альбом, що містить пісню з такою назвою:</p>
+            <p> 1. Знайти артистів, яким належить альбом, що містить пісню з такою назвою:</p>
             <div class="form-group">
                 <input asp-controller="Filter1" placeholder="Введіть назву" type="text" id="songName"
                        name="songName" required minlength="1" size="20"
@@ -21,7 +21,7 @@
             </div>
         </form>
         <form asp-action="Filter2">
-            <p> 2.Знайти альбоми, у яких середня довжина пісні більше: </p>
+            <p> 2. Знайти альбоми, у яких середня довжина пісні більше: </p>
             <div class="form-group">
                 <input asp-controller="Filter2" placeholder="хв" type="number" id="min02"
                        name="min02" required min="0" size="5"
@@ -41,7 +41,7 @@
         </form>
 
         <form asp-action="Filter3">
-            <p> 3.Знайти плейлісти, у яких довжина більше: </p>
+            <p> 3. Знайти плейлісти, у яких довжина більше: </p>
             <div class="form-group">
                 <input asp-controller="Filter3" placeholder="хв" type="number" id="min03"
                        name="min03" required min="0" size="5"
@@ -60,10 +60,10 @@
             </div>
         </form>
         <form asp-action="Filter4">
-            <p> 4.Знайти пісні, у яких кількість артистів більше: </p>
+            <p> 4. Знайти пісні, у яких кількість артистів більше: </p>
             <div class="form-group">
                 <input asp-controller="Filter4" placeholder="Введіть число" type="number" id="number"
-                       name="number" required min="1" size="20" value="1"
+                       name="number" required min="0" size="20" value="1"
                        oninvalid="this.setCustomValidity('Введи число')"
                        oninput="this.setCustomValidity('')">
             </div>
@@ -72,7 +72,7 @@
             </div>
         </form>
         <form asp-action="Filter5">
-            <p> 5.Знайти альбоми, у яких релізер: </p>
+            <p> 5. Знайти альбоми, у яких релізер: </p>
             <div class="form-group">
                 <input asp-controller="Filter5" placeholder="Введіть релізера" type="text" id="publisherName"
                        name="publisherName" required minlength="1" size="20"
@@ -85,7 +85,7 @@
         </form>
 
         <form asp-action="Filter6">
-            <p> 6.Знайти усіх артистів, у яких кількість пісень: </p>
+            <p> 6. Знайти усіх артистів, у яких кількість пісень: </p>
             <div class="form-group">
                 <input asp-controller="Filter6" placeholder="Введіть число" type="number" id="amountSongs"
                        name="amountSongs" required min="1" size="20" value="1"
@@ -97,7 +97,7 @@
             </div>
         </form>
         <form asp-action="Filter7">
-            <p> 7.Знайти усі плейлісти, в яких є всі пісні артиста: </p>
+            <p> 7. Знайти усі плейлісти, в яких є всі пісні артиста: </p>
             <div class="form-group">
                 <input asp-controller="Filter7" placeholder="Введіть артиста " type="text" id="artistName"
                        name="artistName" required minlength="1" size="20"
@@ -110,7 +110,7 @@
         </form>
 
         <form asp-action="Filter8">
-            <p> 8. Знайти альбоми, у яких кількість пісень > X з к-стю артистів > Y: </p>
+            <p> 8. Знайти альбоми, у яких кількість пісень з к-стю артистів більше: </p>
             <div class="form-group">
                 <input asp-controller="Filter8" placeholder="X" type="number" id="numberSongs"
                        name="numberSongs" required min="0" size="20" value="1"

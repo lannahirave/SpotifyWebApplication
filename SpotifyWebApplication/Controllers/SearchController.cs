@@ -13,7 +13,7 @@ public class SearchController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         return View();
     }
