@@ -107,7 +107,6 @@ public class SongsController : Controller
             playsong.TimeSongAdded = time;
             _context.Add(playsong);
             await _context.SaveChangesAsync();
-            //return RedirectToAction("Index", "Songs", new {id = albumId, name = _context.Albums.Where(b => b.Id == albumId).FirstOrDefault().Name});
         }
 
         return RedirectToAction("PlaylistDetails", "Songs", new {id = playsong.PlaylistId});
