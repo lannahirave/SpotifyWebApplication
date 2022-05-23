@@ -10,7 +10,6 @@
     <img src="@ViewBag.LinkToImage" width="240" height="240" alt="" style="border-radius: 50%;">
 </div>
 <p>
-    <!-- <a asp-action="Create" asp-route-id="@ViewBag.ArtistId">Додати новий альбом</a> -->
     @Html.ActionLink("Додати новий альбом", "Create", new {artistId = @ViewBag.ArtistId})
 </p>
 <table class="table">

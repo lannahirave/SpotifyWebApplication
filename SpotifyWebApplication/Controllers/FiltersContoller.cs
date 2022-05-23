@@ -199,13 +199,13 @@ WHERE Not exists
    WHERE
        (SELECT count(DISTINCT ArtistId)
         FROM Artists_songs
-        WHERE SongId = songs.Id ) > @amountArtists )
+        WHERE SongId = songs.Id ) >= @amountArtists )
 SELECT Albums.*
 FROM Albums
 WHERE
     (SELECT count(DISTINCT songsWithManyArtists.id)
      FROM songsWithManyArtists
-     WHERE songsWithManyArtists.AlbumId = Albums.Id ) > @amountSongs;", new {amountArtists, amountSongs});
+     WHERE songsWithManyArtists.AlbumId = Albums.Id ) >= @amountSongs;", new {amountArtists, amountSongs});
         return Results(albums: albums);
     }
 
